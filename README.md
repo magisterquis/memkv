@@ -8,7 +8,7 @@ Written for OpenBSD, probably needs some tweaking for other OSs.
 
 Features
 --------
-- Store and retrieve small amounts of data (e.g. usernames and password) without touching disk
+- Store and retrieve small amounts of data (e.g. usernames and passwords) without touching disk
 - Single static binaries each for client and daemon
 - Reasonably secure, more or less[^1]
 - No network comms
@@ -19,10 +19,21 @@ Features
 Quickstart
 ----------
 ```sh
-$ make     # Build it
-$ ./memkvd # Start the daemon
+$ make       # Build it
+$ ./memkvd   # Start the daemon
+$ ./memkv -h # What can we do?
+Usage: memkv [-h] [-S path] {-gsdl} [key [value]]
 
-$ ./memkv -h             # What can we do?
+Gets, sets, deletes, or lists key/values pairs stored in memkvd.
+
+Flags:
+  -h      - This help
+  -S path - Path to memkvd's socket (default: /home/stuart/.memkvd.sock)
+  -g      - Get a key's value
+  -s      - Set a key's value
+  -d      - Delete a key/value pair
+  -l      - List all keys
+
 $ ./memkv -s myname r00t # Set a not-very-secret value
 $ ./memkv -s mypass      # Set a value without putting it in argv
 Value (will not prompt):
@@ -39,7 +50,9 @@ $ ./memkv -g mypass | ldap search -y- -D "$(./memkv -g myname)",... # Easy :)
 
 Usage
 -----
-###Server (`memkvd`):
+
+### Server (`memkvd`):
+
 ```
 Usage: memkvd [-dhr] [-S path]
 
@@ -52,7 +65,7 @@ Flags:
   -r      - Remove the unix socket if it exists
 ```
 
-###Client (`memkv`):
+### Client (`memkv`):
 ```
 Usage: memkv [-h] [-S path] {-gsdl} [key [value]]
 
@@ -76,7 +89,7 @@ To remove the generated binaries and object files binaries use `make clean`.
 
 Protocol
 --------
-The client-daemon protocol is fairly simple.  The client sends a request to the
+The client/daemon protocol is fairly simple.  The client sends a request to the
 daemon via a Unix socket and writes to stdout whatever the daemon sends back.
 
 Requests consist of a character specifying the operation, and one or two
@@ -139,3 +152,5 @@ Originally the idea was to fiddle around with
 off disk without a daemon running.  Turns out that writes to `/tmp`, and
 the [`shmget(2)`](https://man.openbsd.org/shmget) side of things isn't any
 better.
+
+`¯\_(ツ)_/¯`
