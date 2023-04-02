@@ -28,7 +28,7 @@ Gets, sets, deletes, or lists key/values pairs stored in memkvd.
 
 Flags:
   -h      - This help
-  -S path - Path to memkvd's socket (default: /home/stuart/.memkvd.sock)
+  -S path - Path to memkvd's socket (default: $HOME/.memkvd.sock)
   -g      - Get a key's value
   -s      - Set a key's value
   -d      - Delete a key/value pair

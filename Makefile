@@ -4,7 +4,7 @@
 # Created 20230401
 # Last Modified 20230402
 
-.PHONY: test
+.PHONY: clean
 
 CFLAGS=-O2 -Wall --pedantic -Wextra -static
 BUILD=cc ${CFLAGS}  -o $@ $>
