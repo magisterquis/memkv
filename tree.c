@@ -3,7 +3,7 @@
  * Store k/v pairs in a tree.
  * By J. Stuart McMurray
  * Created 20230402
- * Last Modified 20230402
+ * Last Modified 20230403
  */
 
 /* Most of the below cribbed from OpenBSD's tree(3) manpage, under the
@@ -32,7 +32,6 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
-#include <sys/mman.h>
 #include <sys/tree.h>
 
 #include <err.h>
@@ -106,13 +105,6 @@ set(int c, char *key)
                         warnx("eof (value)");
                         return;
         }
-        /* Prevent the value from hitting swap, just so we can say we do. */
-        if (-1 == mlock(value, vlen)) {
-                dprintf(c, "Keeping value in memory: %s\n", strerror(errno));
-                warn("mlock");
-                goto out;
-        }
-
 
         /* May need to save a copy of the key. */
         if (-1 == asprintf(&nkey, "%s", key)) {
