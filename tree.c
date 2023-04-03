@@ -82,7 +82,7 @@ get(int c, char *key)
                 dprintf(c, "__Key %s not found__\n", key);
                 return;
         }
-        dprintf(c, "%s\n", fn->value);
+        dprintf(c, "%s", fn->value);
 }
 
 /* set gets a value from c and sets the key/value pair. */
