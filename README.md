@@ -1,5 +1,5 @@
-A bit buggy, check back in a bit...
-===================================
+Work in Progress, but reasonably stable
+=======================================
 
 MemKV
 =====
