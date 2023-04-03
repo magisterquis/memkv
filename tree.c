@@ -127,7 +127,8 @@ set(int c, char *key)
                 /* Insert success. */
                 dprintf(c, "Added %s\n", key);
                 printf("Added %s\n", key);
-                nkey = NULL; /* Don't free it. */
+                nkey = NULL;  /* Don't free it. */
+                value = NULL; /* Don't free it. */
         } else {
                 /* Just an update. */
                 FREE(new);
@@ -135,6 +136,7 @@ set(int c, char *key)
                 old->value = value;
                 dprintf(c, "Updated %s\n", key);
                 printf("Updated %s\n", key);
+                value = NULL; /* Don't free it. */
         }
 
 out:
