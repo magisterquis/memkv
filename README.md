@@ -1,3 +1,6 @@
+A bit buggy, check back in a bit...
+===================================
+
 MemKV
 =====
 Simple little in-memory key/value store.  It consists of two parts:
