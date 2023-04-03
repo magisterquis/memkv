@@ -50,7 +50,7 @@ get_value(char **value)
                 err(18, "calloc");
         bufsiz = BUFLEN * sizeof(char); /* calloc prevents overflow. */
         /* Get the data itself. */
-        if (NULL == readpassphrase("Value (will not prompt):",
+        if (NULL == readpassphrase("Value (will not echo):",
                                 *value, bufsiz, 0))
                 err(6, "readpassphrase");
 }
