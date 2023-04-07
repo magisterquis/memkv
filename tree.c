@@ -3,7 +3,7 @@
  * Store k/v pairs in a tree.
  * By J. Stuart McMurray
  * Created 20230402
- * Last Modified 20230403
+ * Last Modified 20230407
  */
 
 /* Most of the below cribbed from OpenBSD's tree(3) manpage, under the
@@ -127,12 +127,10 @@ set(int c, char *key)
                 /* Insert success. */
                 dprintf(c, "Added %s\n", key);
                 printf("Added %s\n", key);
-                nkey = NULL;  /* Don't free it. */
-                value = NULL; /* Don't free it. */
+                return;
         } else {
                 /* Just an update. */
-                FREE(new);
-                FREE(old->value);
+                ZFREE(old->value);
                 old->value = value;
                 dprintf(c, "Updated %s\n", key);
                 printf("Updated %s\n", key);
@@ -140,8 +138,9 @@ set(int c, char *key)
         }
 
 out:
+        ZFREE(value);
         FREE(nkey);
-        FREE(value);
+        FREE(new);
 }
 
 /* del deletes a key/value pair. */
@@ -162,7 +161,7 @@ del(int c, char *key)
                 return;
         }
         FREE(fn->key);
-        FREE(fn->value);
+        ZFREE(fn->value);
         FREE(fn);
         dprintf(c, "Deleted %s\n", key);
         printf("Deleted %s\n", key);

@@ -3,7 +3,7 @@
  * Functions common to both server and client
  * By J. Stuart McMurray
  * Created 20230402
- * Last Modified 20230402
+ * Last Modified 20230407
  */
 
 #include <sys/socket.h>
@@ -93,7 +93,7 @@ read_buf(int fd, char **buf)
         if (NULL == (*buf = calloc(slen, 1)))
                 return -1;
         if (sbuf != (nr = recv(fd, *buf, sbuf, MSG_WAITALL))) {
-                free(*buf); *buf = NULL;
+                FREE(*buf);
                 return -1 == nr ? nr : 0;
         }
         return slen;

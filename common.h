@@ -3,7 +3,7 @@
  * Functions common to both server and client
  * By J. Stuart McMurray
  * Created 20230402
- * Last Modified 20230402
+ * Last Modified 20230407
  */
 
 #ifndef HAVE_COMMON_H
@@ -27,7 +27,14 @@
 #define OP_ALL 'l'
 
 /* FREE frees x if it's not NULL. */
-#define FREE(x) do { if (NULL != (x)) {free((x)); (x) = NULL;} } while (0);
+#define FREE(x) do { if (NULL != (x)) {free((x)); (x) = NULL;} } while (0)
+
+/* ZFREE zeros the string s and then frees it if it's not NULL. */
+#define ZFREE(x) do { if (NULL != (x)) {  \
+        explicit_bzero((x), strlen((x))); \
+        free((x));                        \
+        (x) = NULL;                       \
+}} while (0)
 
 /* default_socket is the default socket path.  It must be set with 
  * init_default_socket before use. */
