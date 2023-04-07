@@ -3,7 +3,7 @@
  * Server side of memkvs
  * By J. Stuart McMurray
  * Created 20230402
- * Last Modified 20230402
+ * Last Modified 20230407
  */
 
 #include <sys/socket.h>
@@ -19,8 +19,11 @@
 #include "common.h"
 #include "handle.h"
 
-int   lfd;  /* Listining socket. */
-char *path; /* Socket path. */
+int   lfd;           /* Listining socket. */
+char *path;          /* Socket path. */
+int   to_catch[] = { /* Signals to catch and remove the socket. */
+        SIGHUP, SIGINT, SIGTERM, SIGUSR1, SIGUSR2, SIGHUP
+};
 
 /* usage prints a usage statement and exits. */
 void
@@ -53,7 +56,7 @@ void
 sighandler(int sig)
 {
         unlink_sock();
-        errx(12, "caught signal %d, %s", sig, strsignal(sig));
+        errx(12, "caught SIG%s", sys_signame[sig]);
 }
 
 int
@@ -62,6 +65,7 @@ main(int argc, char **argv)
         int dflag, rflag, ch, c, i;
         struct sockaddr_un sa;
         socklen_t len;
+
 
         if (-1 == pledge("cpath getpw proc stdio unix unveil", ""))
                 err(31, "pledge");
@@ -125,14 +129,8 @@ main(int argc, char **argv)
                 err(30, "pledge");
 
         /* Catch signals so we can remove the socket before dying. */
-        for (i = 1; i < NSIG; ++i) {
-                switch (i) {
-                        case SIGKILL:
-                        case SIGSTOP:
-                        case SIGTHR:
-                                continue;
-                }
-                if (SIG_ERR == signal(i, sighandler))
+        for (i = 1; i < (int)(sizeof(to_catch)/sizeof(to_catch[0])); ++i) {
+                if (SIG_ERR == signal(to_catch[i], sighandler))
                         err(13, "signal (%d)", i);
         }
 
