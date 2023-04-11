@@ -55,7 +55,7 @@ get_socket_addr(struct sockaddr_un *sa, char **addr)
         if (sizeof(sa->sun_path)-1 < strlen(*addr))
                 errx(5, "socket address %s too long (should be <= %lu", *addr,
                                 sizeof(sa->sun_path)-1);
-        strcpy(sa->sun_path, *addr);
+        strlcpy(sa->sun_path, *addr, sizeof(sa->sun_path));
 
         /* Fill in the rest of the address. */
         sa->sun_len = sizeof(sa);
